@@ -39,7 +39,7 @@
     <section id="event" class="max-w-7xl mx-auto py-14 px-6">
         <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-10">
             <h2 class="text-2xl md:text-3xl font-black uppercase italic tracking-wide">
-                Event Tersedia
+                Event
             </h2>
 
             {{-- Kategori --}}
