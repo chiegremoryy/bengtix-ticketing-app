@@ -11,6 +11,7 @@ use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\TiketTypeController;
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -43,6 +44,9 @@ Route::middleware('auth')->group(function () {
 
         // Payments
         Route::resource('payments', PaymentController::class);
+
+        // Ticket Types
+        Route::resource('ticket_types', TiketTypeController::class);
 
         // Histories
         Route::get('/histories', [HistoriesController::class, 'index'])->name('histories.index');
