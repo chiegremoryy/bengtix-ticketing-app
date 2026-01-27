@@ -1,17 +1,17 @@
 <x-layouts.admin title="Detail Event">
     <div class="container mx-auto p-10">
         @if (session('success'))
-            <div class="toast toast-bottom toast-center z-50">
-                <div class="alert alert-success">
-                    <span>{{ session('success') }}</span>
-                </div>
+        <div class="toast toast-bottom toast-center z-50">
+            <div class="alert alert-success">
+                <span>{{ session('success') }}</span>
             </div>
+        </div>
 
-            <script>
-                setTimeout(() => {
-                    document.querySelector('.toast')?.remove()
-                }, 3000)
-            </script>
+        <script>
+            setTimeout(() => {
+                document.querySelector('.toast')?.remove()
+            }, 3000)
+        </script>
         @endif
         <div class="card bg-base-100 shadow-sm">
             <div class="card-body">
@@ -66,10 +66,10 @@
                         <select name="kategori_id" class="select select-bordered w-full" required disabled>
                             <option value="" disabled selected>Pilih Kategori</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}"
-                                    {{ $category->id == $event->kategori_id ? 'selected' : '' }}>
-                                    {{ $category->nama }}
-                                </option>
+                            <option value="{{ $category->id }}"
+                                {{ $category->id == $event->kategori_id ? 'selected' : '' }}>
+                                {{ $category->nama }}
+                            </option>
                             @endforeach
 
                         </select>
@@ -96,10 +96,10 @@
                         <div class="avatar max-w-sm">
                             <div class="w-full rounded-lg">
                                 @if ($event->gambar)
-                                    <img id="previewImg" src="{{ asset('images/events/' . $event->gambar) }}"
-                                        alt="Preview">
+                                <img id="previewImg" src="{{ asset('images/events/' . $event->gambar) }}"
+                                    alt="Preview">
                                 @else
-                                    <img id="previewImg" src="" alt="Preview">
+                                <img id="previewImg" src="" alt="Preview">
                                 @endif
                             </div>
                         </div>
@@ -110,7 +110,7 @@
 
         <div class="mt-10">
             <div class="flex">
-                <h1 class="text-3xl font-semibold mb-4">List Ticket</h1>
+                <h1 class="text-3xl font-semibold mb-4">Daftar Ticket</h1>
                 <button onclick="add_ticket_modal.showModal()" class="btn btn-primary ml-auto">Tambah Ticket</button>
             </div>
             <div class="overflow-x-auto rounded-box bg-white p-5 shadow-xs">
@@ -126,24 +126,24 @@
                     </thead>
                     <tbody>
                         @forelse ($tickets as $index => $ticket)
-                            <tr>
-                                <th>{{ $index + 1 }}</th>
-                                <td>{{ $ticket->tipe }}</td>
-                                <td>{{ $ticket->harga }}</td>
-                                <td>{{ $ticket->stok }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary mr-2" onclick="openEditModal(this)"
-                                        data-id="{{ $ticket->id }}" data-tipe="{{ $ticket->tipe }}"
-                                        data-harga="{{ $ticket->harga }}"
-                                        data-stok="{{ $ticket->stok }}">Edit</button>
-                                    <button class="btn btn-sm bg-red-500 text-white" onclick="openDeleteModal(this)"
-                                        data-id="{{ $ticket->id }}">Hapus</button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <th>{{ $index + 1 }}</th>
+                            <td>{{ $ticket->ticketType->name ?? '-' }}</td>
+                            <td>Rp {{ number_format($ticket->harga, 0, ',', '.') }}</td>
+                            <td>{{ $ticket->stok }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary mr-2" onclick="openEditModal(this)"
+                                    data-id="{{ $ticket->id }}" data-ticket-type-id="{{ $ticket->ticket_type_id }}"
+                                    data-harga="{{ $ticket->harga }}"
+                                    data-stok="{{ $ticket->stok }}">Edit</button>
+                                <button class="btn btn-sm bg-red-500 text-white" onclick="openDeleteModal(this)"
+                                    data-id="{{ $ticket->id }}">Hapus</button>
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="6" class="text-center">Tidak ada ticket tersedia.</td>
-                            </tr>
+                        <tr>
+                            <td colspan="6" class="text-center">Tidak ada ticket tersedia.</td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -164,10 +164,11 @@
                 <label class="label">
                     <span class="label-text font-semibold">Tipe Ticket</span>
                 </label>
-                <select name="tipe" class="select select-bordered w-full" required>
+                <select name="ticket_type_id" class="select select-bordered w-full" required>
                     <option value="" disabled selected>Pilih Tipe Ticket</option>
-                    <option value="reguler">Regular</option>
-                    <option value="premium">Premium</option>
+                    @foreach ($ticketTypes as $type)
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="form-control mb-4">
@@ -205,10 +206,12 @@
                 <label class="label">
                     <span class="label-text font-semibold">Tipe Ticket</span>
                 </label>
-                <select name="tipe" id="edit_tipe" class="select select-bordered w-full" required>
-                    <option value="" disabled selected>Pilih Tipe Ticket</option>
-                    <option value="reguler">Regular</option>
-                    <option value="premium">Premium</option>
+                <select name="ticket_type_id" id="edit_ticket_type_id"
+                    class="select select-bordered w-full" required>
+                    <option value="" disabled>Pilih Tipe Ticket</option>
+                    @foreach ($ticketTypes as $type)
+                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="form-control mb-4">
@@ -249,8 +252,6 @@
         </form>
     </dialog>
 
-
-
     <script>
         const form = document.getElementById('eventForm');
         const fileInput = form.querySelector('input[type="file"]');
@@ -289,13 +290,13 @@
 
         function openEditModal(button) {
             const id = button.dataset.id;
-            const tipe = button.dataset.tipe;
+            const ticketTypeId = button.dataset.ticketTypeId;
             const harga = button.dataset.harga;
             const stok = button.dataset.stok;
 
             const form = document.querySelector('#edit_ticket_modal form');
             document.getElementById("edit_ticket_id").value = id;
-            document.getElementById("edit_tipe").value = tipe;
+            document.getElementById("edit_ticket_type_id").value = ticketTypeId;
             document.getElementById("edit_harga").value = harga;
             document.getElementById("edit_stok").value = stok;
 

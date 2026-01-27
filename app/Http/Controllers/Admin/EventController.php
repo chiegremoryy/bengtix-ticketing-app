@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Kategori;
 use App\Models\TiketType;
+use App\Models\Tiket;
 
 class EventController extends Controller
 {
@@ -59,14 +60,23 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        $ticketType = TiketType::all();
         $event = Event::findOrFail($id);
-        $categories = Kategori::all();
-        $tickets = $event->tikets;
 
-        return view('admin.event.show', compact('event', 'categories', 'tickets', 'ticketType'));
+        $tickets = Tiket::where('event_id', $id)
+            ->with('ticketType')
+            ->get();
+
+        $categories = Kategori::all();
+        $ticketTypes = TiketType::all();
+
+        return view('admin.event.show', compact(
+            'event',
+            'tickets',
+            'categories',
+            'ticketTypes'
+        ));
     }
 
     /**

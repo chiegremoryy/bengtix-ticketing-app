@@ -10,10 +10,18 @@ return new class extends Migration
     {
         Schema::create('tikets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_id')->constrained()->onDelete('cascade');
-            $table->enum("tipe", ["reguler", "premium"]);
-            $table->decimal("harga", 10, 2);
-            $table->integer("stok");
+
+            $table->foreignId('event_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('ticket_type_id')
+                ->constrained('tiket_types')
+                ->cascadeOnDelete();
+
+            $table->decimal('harga', 10, 2);
+            $table->integer('stok');
+
             $table->timestamps();
         });
     }

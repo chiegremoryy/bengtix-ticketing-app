@@ -11,7 +11,6 @@ class Tiket extends Model
 
     protected $fillable = [
         'event_id',
-        //'tipe',
         'ticket_type_id',
         'harga',
         'stok',
@@ -32,8 +31,8 @@ class Tiket extends Model
         return $this->belongsToMany(Order::class, 'detail_orders')
             ->withPivot('jumlah', 'subtotal_harga');
     }
-    
-    public function tiketType()
+
+    public function ticketType()
     {
         return $this->belongsTo(TiketType::class, 'ticket_type_id');
     }

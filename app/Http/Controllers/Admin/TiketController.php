@@ -29,15 +29,13 @@ class TiketController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = request()->validate([
+        $validatedData = $request->validate([
             'event_id' => 'required|exists:events,id',
-            //'tipe' => 'required|string|max:255',
-            'tiket_type_id' => 'required|exists:tiket_types,id',
+            'ticket_type_id' => 'required|exists:tiket_types,id',
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
         ]);
 
-        // Create the ticket
         Tiket::create($validatedData);
 
         return redirect()->route('admin.events.show', $validatedData['event_id'])->with('success', 'Ticket berhasil ditambahkan.');
@@ -67,15 +65,16 @@ class TiketController extends Controller
         $ticket = Tiket::findOrFail($id);
 
         $validatedData = $request->validate([
-            //'tipe' => 'required|string|max:255',
-            'tiket_type_id' => 'required|exists:tiket_types,id',
+            'ticket_type_id' => 'required|exists:tiket_types,id',
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
         ]);
 
         $ticket->update($validatedData);
 
-        return redirect()->route('admin.events.show', $ticket->event_id)->with('success', 'Ticket berhasil diperbarui.');
+        return redirect()
+            ->route('admin.events.show', $ticket->event_id)
+            ->with('success', 'Ticket berhasil diperbarui.');
     }
 
     /**
