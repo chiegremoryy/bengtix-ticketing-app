@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-sm px-6 min-h-[64px]">
     <div class="navbar-start">
         <div class="dropdown">
             <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -8,8 +8,10 @@
                 </svg>
             </div>
         </div>
-        <a href="{{ route('home') }}">
-            <img src={{ asset('assets/images/logo_bengkod.svg') }} />
+        <a href="{{ route('home') }}" class="flex items-center">
+            <img
+                src="{{ asset('assets/images/logo_bengtix.png') }}"
+                class="max-h-12" />
         </a>
     </div>
     <div class="navbar-center hidden lg:flex">

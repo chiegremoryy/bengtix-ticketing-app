@@ -4,42 +4,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>{{ $title ?? 'Admin Dashboard' }}</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <!-- DaisyUI & Tailwind -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body>
-    <div class="drawer lg:drawer-open w-full min-h-screen bg-gray-50">
-        <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content">
-            <!-- Navbar -->
-            <nav class="navbar w-full bg-base-300">
-                <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost lg:hidden">
-                    <!-- Sidebar toggle icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="my-1.5 inline-block size-4">
-                        <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
-                        <path d="M9 4v16"></path>
-                        <path d="M14 10l2 2l-2 2"></path>
-                    </svg>
-                </label>
+<body class="bg-gray-100">
+    <div class="drawer lg:drawer-open min-h-screen">
+        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+
+        <!-- MAIN CONTENT -->
+        <div class="drawer-content flex flex-col">
+
+            <!-- NAVBAR -->
+            <nav class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+                <div class="navbar px-4 lg:px-6">
+
+                    <!-- Mobile Drawer Button (Kiri) -->
+                    <div class="flex-none lg:hidden">
+                        <label for="my-drawer" class="btn btn-square btn-ghost">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                class="w-6 h-6 stroke-current" fill="none">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </label>
+                    </div>
+
+                    <!-- SPACER (pengganti page title) -->
+                    <div class="flex-1"></div>
+
+                    <!-- User Menu (Kanan) -->
+                    <div class="flex-none">
+                        <div class="dropdown dropdown-end">
+                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                                <div
+                                    class="w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold">
+                                    {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
+                                </div>
+                            </div>
+
+                            <ul tabindex="0"
+                                class="menu menu-sm dropdown-content mt-3 z-[1] w-52 rounded-lg bg-white border border-gray-200 shadow-lg p-2">
+                                <li class="menu-title px-4 py-2">
+                                    <span class="text-xs text-gray-500">Signed in as</span>
+                                    <span class="font-semibold text-gray-800">
+                                        {{ Auth::user()->name ?? 'Admin' }}
+                                    </span>
+                                </li>
+                                <div class="divider my-0"></div>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
             </nav>
-            <!-- Page content -->
-            {{ $slot }}
+
+            <!-- PAGE CONTENT -->
+            <main class="flex-1">
+                {{ $slot }}
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="bg-white border-t border-gray-200">
+                <div class="px-6 py-4 text-center text-sm text-gray-600">
+                    © {{ date('Y') }} BengTixApp. All rights reserved.
+                </div>
+            </footer>
         </div>
 
+        <!-- SIDEBAR -->
         @include('components.admin.sidebar')
     </div>
 
-    <footer class="bg-light text-center py-3">
-        <div class="container">
-            <p>© {{ date('Y') }} MyLaravelApp. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    {{-- Section untuk script tambahan --}}
+    {{-- Extra scripts --}}
     @stack('scripts')
 </body>
 
