@@ -54,8 +54,16 @@
                         <label class="label">
                             <span class="label-text font-semibold">Lokasi</span>
                         </label>
-                        <input type="text" name="lokasi" placeholder="Contoh: Stadion Utama"
-                            class="input input-bordered w-full" value="{{ $event->lokasi }}" disabled required />
+                        <select name="lokasi_id" class="select select-bordered w-full" required disabled>
+                            <option value="" disabled selected>Pilih Lokasi</option>
+                            @foreach ($locations as $location)
+                            <option value="{{ $location->id }}"
+                                {{ $location->id == $event->lokasi_id ? 'selected' : '' }}>
+                                {{ $location->nama_lokasi }}
+                            </option>
+                            @endforeach
+
+                        </select>
                     </div>
 
                     <!-- Kategori -->
@@ -118,7 +126,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th class="w-1/3">tipe</th>
+                            <th class="w-1/3">Tipe Tiket</th>
                             <th>Harga</th>
                             <th>Stok</th>
                             <th>Aksi</th>

@@ -12,6 +12,7 @@ use App\Http\Controllers\User\EventController as UserEventController;
 use App\Http\Controllers\User\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\TiketTypeController;
+use App\Http\Controllers\Admin\LokasiController;
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -35,6 +36,9 @@ Route::middleware('auth')->group(function () {
 
         // Categories
         Route::resource('categories', CategoryController::class);
+
+        // Lokasi
+        Route::resource('locations', LokasiController::class);
 
         // Events
         Route::resource('events', AdminEventController::class);
